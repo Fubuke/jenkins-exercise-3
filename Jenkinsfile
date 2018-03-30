@@ -1,35 +1,32 @@
 pipeline {
-
     agent any
     
     stages {
-      stage('cred'){
+      stage('all'){
           steps {
-            def input = readFile "conf/bdd.conf"
-            def config = new groovy.json.JsonSlurperClassic().parseText(input)
+              node{
+                def input = readFile "conf/bdd.conf"
+                def config = new groovy.json.JsonSlurperClassic().parseText(input)
 
-            withCredentials([
-                string(credentialsId: 'db.user.'+ params.ENV, variable: 'user'),
-                string(credentialsId: 'db.database.'+ params.ENV, variable: 'database'),
-                string(credentialsId: 'db.password.'+ params.ENV, variable: 'password')
-           ]) {
+                withCredentials([
+                    string(credentialsId: 'db.user.'+ params.ENV, variable: 'user'),
+                    string(credentialsId: 'db.database.'+ params.ENV, variable: 'database'),
+                    string(credentialsId: 'db.password.'+ params.ENV, variable: 'password')
+               ]) {
 
-               config["user"] = user
-               config["database"] = database
-               config["password"] = password
+                   config["user"] = user
+                   config["database"] = database
+                   config["password"] = password
 
-               def output = groovy.json.JsonOutput.toJson(config)
+                   def output = groovy.json.JsonOutput.toJson(config)
 
-               writeFile file: "conf/bdd" + params.ENV + ".conf", text: output
+                   writeFile file: "conf/bdd" + params.ENV + ".conf", text: output
 
-               echo output
-            }
-         }
-      }
-      stage('archive'){
-         steps {
+                   echo output
+                }                  
              archiveArtifacts "conf/"
-         }
+             }
+          }
       }
    }
 }
