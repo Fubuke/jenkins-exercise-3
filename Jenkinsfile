@@ -30,8 +30,5 @@ pipeline {
 				}
 			}
 		}
-		stage('archive'){
-			archiveArtifacts "conf/"
-		}
 	}
 }
