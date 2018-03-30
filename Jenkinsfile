@@ -7,6 +7,16 @@ pipeline {
     }
     
 	stages {
+	    stage("clean") {
+	    	steps {
+	        	cleanWs()
+	        }
+	    }
+	    stage("git") {
+	    	steps {
+		        git 'https://github.com/deather/jenkins-exercise-3'
+	        }
+	    }   
 		stage('cred'){
 			steps {
 				withCredentials([
