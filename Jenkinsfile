@@ -30,5 +30,10 @@ pipeline {
 				}
 			}
 		}
+		stage('archive'){
+			steps{
+				archiveArtifacts "conf/"
+			}
+		}
 	}
 }
